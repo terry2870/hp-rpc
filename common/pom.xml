@@ -8,16 +8,13 @@
 		<artifactId>hp-rpc</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>hp-rpc-client</artifactId>
-	<name>hp-rpc-client</name>
+	<artifactId>hp-rpc-common</artifactId>
+	<name>hp-rpc-common</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.hp.rpc</groupId>
-			<artifactId>hp-rpc-common</artifactId>
-		</dependency>
+		
 	</dependencies>
 </project>
