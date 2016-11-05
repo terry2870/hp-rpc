@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 装在properties文件 -->
+	<context:property-placeholder location="classpath*:config.properties" />
+
+	<context:component-scan base-package="com.base" />
+	<context:component-scan base-package="com.eie" />
+	<mvc:annotation-driven />
+	
+	<bean id="LayoutExceptionHandler" class="com.base.common.interceptor.BaseExceptionHandler" />
+	<bean id="urlInterceptor" class="com.base.common.interceptor.UrlInterceptor">
+		<!-- 一级免过滤列表（不需要登录，就可以访问的url） -->
+		<property name="firstNoFilterList">
+			<list>
+				<bean>
+					<property name="" />
+				</bean>
+				<value>login.do</value>
+			</list>
+		</property>
+		<!-- 只要登录，就能访问的url -->
+		<property name="secondNoFilterList">
+			<list>
+				<value>NoFilterController.do</value>
+				<value>queryUserSessionMenu.do</value>
+				<value>querySessionButtonByMenuId.do</value>
+			</list>
+		</property>
+		<property name="superManagerList">
+			<list>
+				<value>admin</value>
+			</list>
+		</property>
+	</bean>
+	<mvc:interceptors>
+		<ref bean="urlInterceptor" />
+	</mvc:interceptors>
+	
+	<bean id="springContextUtil" class="com.hp.tools.common.utils.SpringContextUtil" />
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"></property>
+		<property name="maxUploadSize" value="10485760"></property><!-- 10M -->
+	</bean>
+</beans>
+
