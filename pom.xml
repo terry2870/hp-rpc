@@ -44,6 +44,16 @@
 			<artifactId>hp-core-zookeeper</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hp.core</groupId>
+			<artifactId>hp-core-netty</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.core</groupId>
+			<artifactId>hp-core-zookeeper</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<modules>
