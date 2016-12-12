@@ -23,21 +23,6 @@ public class RPCServerConfigBean extends BaseBean {
 	private static final long serialVersionUID = -8073831289068931300L;
 
 	/**
-	 * zk地址
-	 */
-	private String zkAddress;
-	
-	/**
-	 * 服务注册到zk的根节点
-	 */
-	private String zkRootPath;
-	
-	/**
-	 * 连接zk超时时间
-	 */
-	private int zkSessionTimeout;
-	
-	/**
 	 * 服务端启动的线程数
 	 */
 	private int threadSize;
@@ -147,30 +132,6 @@ public class RPCServerConfigBean extends BaseBean {
 
 	public void setAllowClassMethods(List<String> allowClassMethods) {
 		this.allowClassMethods = allowClassMethods;
-	}
-
-	public String getZkAddress() {
-		return zkAddress;
-	}
-
-	public void setZkAddress(String zkAddress) {
-		this.zkAddress = zkAddress;
-	}
-
-	public String getZkRootPath() {
-		return zkRootPath;
-	}
-
-	public void setZkRootPath(String zkRootPath) {
-		this.zkRootPath = zkRootPath;
-	}
-
-	public int getZkSessionTimeout() {
-		return zkSessionTimeout;
-	}
-
-	public void setZkSessionTimeout(int zkSessionTimeout) {
-		this.zkSessionTimeout = zkSessionTimeout;
 	}
 
 	public int getPort() {

@@ -6,18 +6,25 @@ package com.hp.rpc.server;
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import com.hp.rpc.common.discovery.ServiceDiscoveryFactory;
+import com.hp.core.zookeeper.bean.ZKConfig;
+import com.hp.core.zookeeper.curator.ZKCuratorFrameworkFactory;
+import com.hp.core.zookeeper.helper.ZookeeperHelper;
+import com.hp.rpc.common.constants.RPCConstant;
 import com.hp.rpc.model.RPCServerConfigBean;
-import com.hp.rpc.model.RegisterInstanceDetail;
+import com.hp.rpc.model.RegisterBean;
+import com.hp.tools.common.utils.DateUtil;
 import com.hp.tools.common.utils.StringUtil;
 
 /**
@@ -25,14 +32,59 @@ import com.hp.tools.common.utils.StringUtil;
  * @author ping.huang
  * 2016年12月7日
  */
-public class ServiceRegistry implements BeanPostProcessor, Closeable {
+public class ServiceRegistry_bak implements BeanPostProcessor, Closeable {
 
-	static Logger log = LoggerFactory.getLogger(ServiceRegistry.class);
+	static Logger log = LoggerFactory.getLogger(ServiceRegistry_bak.class);
 	
 	private RPCServerConfigBean serverConfigBean;
 	
-	private ServiceDiscoveryFactory serviceDiscoveryFactory;
+	private ZKConfig zkConfig;
 	
+	private ZooKeeper zooKeeper;
+	
+	/**
+	 * 初始化服务
+	 * @throws Exception
+	 */
+	public void init() throws Exception {
+		log.info("init start ServiceRegistry");
+		if (StringUtils.isEmpty(zkConfig.getBasePath())) {
+			zkConfig.setBasePath(RPCConstant.ZK_ROOT_PATH);
+		}
+		if (zkConfig.getSessionTimeoutMs() == 0) {
+			zkConfig.setSessionTimeoutMs(RPCConstant.ZK_SESSION_TIMEOUT);
+		}
+		if (zkConfig.getConnectionTimeoutMs() == 0) {
+			zkConfig.setConnectionTimeoutMs(RPCConstant.ZK_CONNECTION_TIMEOUT);
+		}
+		
+		ZKConfig config = new ZKConfig();
+		config.setConnectionTimeoutMs(1);
+		ZKCuratorFrameworkFactory.getInstance().init(config);
+		
+		
+		
+		//初始化zk
+		if (zooKeeper == null) {
+			zooKeeper = ZookeeperHelper.getConnection(zkConfig.getConnectString(), zkConfig.getSessionTimeoutMs());
+		}
+		
+		//创建zk根节点
+		ZookeeperHelper.createNode(zooKeeper, zkConfig.getBasePath(), null, CreateMode.PERSISTENT);
+		
+		log.info("init success ServiceRegistry");
+	}
+	
+	@Override
+	public void close() throws IOException {
+		if (zooKeeper != null) {
+			try {
+				zooKeeper.close();
+			} catch (InterruptedException e) {
+				log.error("close zk error. with msg={}", e.getMessage(), e);
+			}
+		}
+	}
 	
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -52,8 +104,6 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 			return bean;
 		}
 		Class<?> clazz = bean.getClass();
-		
-		//只暴露有接口的方法
 		Class<?>[] clazzes = clazz.getInterfaces();
 		if (ArrayUtils.isEmpty(clazzes)) {
 			//该类没有实现接口
@@ -139,17 +189,26 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 				//方法不允许注册
 				continue;
 			}
-			RegisterInstanceDetail detail = new RegisterInstanceDetail();
-			detail.setClassName(clazz.getName());
-			detail.setBeanName(beanName);
-			detail.setLinstenAddress(StringUtil.fetchLocalIP());
-			detail.setLinstenPort(serverConfigBean.getPort());
-			detail.setMethodName(m.getName());
-			detail.setServiceName(detail.getClassName() + "." + detail.getMethodName());
-			detail.setServiceType("netty");
-			
-			//注册服务
-			serviceDiscoveryFactory.registerService(detail);
+			try {
+				//创建服务节点
+				ZookeeperHelper.createNode(zooKeeper, zkConfig.getBasePath() + "/" + clazz.getName() + "." + m.getName(), null, CreateMode.PERSISTENT);
+				
+				//创建服务数据
+				String uuid = UUID.randomUUID().toString();
+				RegisterBean register = new RegisterBean();
+				register.setBeanName(beanName);
+				register.setClassName(clazz);
+				register.setIp(StringUtil.fetchLocalIP());
+				register.setMethodName(m.getName());
+				register.setPackageName(clazz.getPackage().getName());
+				register.setPort(serverConfigBean.getPort());
+				register.setRegisterTime(DateUtil.getCurrentTimeSeconds());
+				register.setUuid(uuid);
+				ZookeeperHelper.createNode(zooKeeper, zkConfig.getBasePath() + "/" + clazz.getName() + "." + m.getName() + "/" + uuid, register.toString(), CreateMode.EPHEMERAL);
+			} catch (Exception e) {
+				log.error("registry error. with class={}, method={}", clazz, m.getName(), e);
+				continue;
+			}
 		}
 	}
 	
@@ -181,11 +240,6 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 		log.warn("checkMethod error. with method is not in allow. with className={}, methodName={}", className, methodName);
 		return false;
 	}
-	
-	@Override
-	public void close() throws IOException {
-		
-	}
 
 
 	public RPCServerConfigBean getServerConfigBean() {
@@ -196,12 +250,12 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 		this.serverConfigBean = serverConfigBean;
 	}
 
-	public ServiceDiscoveryFactory getServiceDiscoveryFactory() {
-		return serviceDiscoveryFactory;
+	public ZKConfig getZkConfig() {
+		return zkConfig;
 	}
 
-	public void setServiceDiscoveryFactory(ServiceDiscoveryFactory serviceDiscoveryFactory) {
-		this.serviceDiscoveryFactory = serviceDiscoveryFactory;
+	public void setZkConfig(ZKConfig zkConfig) {
+		this.zkConfig = zkConfig;
 	}
 
 }

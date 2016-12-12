@@ -54,7 +54,7 @@ public class RegisterBean extends BaseBean {
 	/**
 	 * 注册时间
 	 */
-	private long registrationTime;
+	private int registerTime;
 
 	public String getBeanName() {
 		return beanName;
@@ -103,20 +103,20 @@ public class RegisterBean extends BaseBean {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-
-	public long getRegistrationTime() {
-		return registrationTime;
-	}
-
-	public void setRegistrationTime(long registrationTime) {
-		this.registrationTime = registrationTime;
-	}
-
+	
 	public String getUuid() {
 		return uuid;
 	}
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public int getRegisterTime() {
+		return registerTime;
+	}
+
+	public void setRegisterTime(int registerTime) {
+		this.registerTime = registerTime;
 	}
 }

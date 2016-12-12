@@ -9,6 +9,9 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.hp.core.netty.bean.NettyRequest;
 import com.hp.core.netty.bean.NettyResponse;
@@ -19,18 +22,20 @@ import com.hp.rpc.common.exceptions.BeanNoFoundException;
 import com.hp.rpc.model.RPCRequestBean;
 import com.hp.rpc.model.RPCServerConfigBean;
 import com.hp.tools.common.utils.ObjectUtil;
-import com.hp.tools.common.utils.SpringContextUtil;
 
 /**
  * 远程调用服务端
  * @author ping.huang
  * 2016年11月4日
  */
-public class RPCServer implements Closeable {
+public class RPCServer implements Closeable, ApplicationContextAware {
 	
 	static Logger log = LoggerFactory.getLogger(RPCServer.class);
 	
+	private ApplicationContext applicationContext;
+	
 	private RPCServerConfigBean serverConfigBean;
+	private Server server;
 	
 	/**
 	 * 初始化服务端
@@ -42,7 +47,7 @@ public class RPCServer implements Closeable {
 			return;
 		}
 		//初始化服务
-		Server server = new NettyServer(serverConfigBean.getPort(), new NettyProcess() {
+		server = new NettyServer(serverConfigBean.getPort(), new NettyProcess() {
 
 			@Override
 			public NettyResponse process(NettyRequest request) throws Exception {
@@ -50,9 +55,9 @@ public class RPCServer implements Closeable {
 				RPCRequestBean bean = (RPCRequestBean) request;
 				Object serviceBean = null;
 				if (StringUtils.isNotEmpty(bean.getBeanName())) {
-					serviceBean = SpringContextUtil.getBean(bean.getBeanName());
+					serviceBean = applicationContext.getBean(bean.getBeanName());
 				} else {
-					serviceBean = SpringContextUtil.getBean(bean.getClassName());
+					serviceBean = applicationContext.getBean(bean.getClassName());
 				}
 				if (serviceBean == null) {
 					throw new BeanNoFoundException("can not found bean of beanName="+ bean.getBeanName() +" or className=" + bean.getClassName() + ". with messageId=" + bean.getMessageId());
@@ -73,8 +78,9 @@ public class RPCServer implements Closeable {
 	
 	@Override
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
-		
+		if (server != null) {
+			server.stop();
+		}
 	}
 
 	public RPCServerConfigBean getServerConfigBean() {
@@ -83,5 +89,10 @@ public class RPCServer implements Closeable {
 
 	public void setServerConfigBean(RPCServerConfigBean serverConfigBean) {
 		this.serverConfigBean = serverConfigBean;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
+		this.applicationContext = arg0;
 	}
 }
