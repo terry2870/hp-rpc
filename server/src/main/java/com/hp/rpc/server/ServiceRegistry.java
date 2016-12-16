@@ -32,7 +32,7 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 	private RPCServerConfigBean serverConfigBean;
 	
 	private ServiceDiscoveryFactory serviceDiscoveryFactory;
-	
+
 	
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -41,6 +41,7 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		log.info("postProcessAfterInitialization with beanName={}", beanName);
 		if (serverConfigBean == null) {
 			//没有设置配置文件
 			log.warn("ServiceRegistry error. with config is null");
@@ -184,7 +185,7 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 	
 	@Override
 	public void close() throws IOException {
-		
+		log.info("close ServiceRegistry");
 	}
 
 

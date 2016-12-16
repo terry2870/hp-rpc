@@ -21,7 +21,7 @@
 	<property name="logs.basedir" value="E:/logs/"/>
 	
 	<!-- 项目名称 -->
-	<property name="projectName" value="test"/>
+	<property name="projectName" value="rpc-test"/>
 	
 	<!-- ConsoleAppender 控制台输出日志 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

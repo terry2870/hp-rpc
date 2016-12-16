@@ -86,4 +86,12 @@ public class ServiceDiscoveryFactory implements Closeable {
 			CloseableUtils.closeQuietly(closeable);
 		}
 	}
+
+	public ServiceDiscovery<RegisterInstanceDetail> getServiceDiscovery() {
+		return serviceDiscovery;
+	}
+
+	public void setServiceDiscovery(ServiceDiscovery<RegisterInstanceDetail> serviceDiscovery) {
+		this.serviceDiscovery = serviceDiscovery;
+	}
 }

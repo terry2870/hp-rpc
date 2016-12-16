@@ -78,6 +78,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 	
 	@Override
 	public void close() throws IOException {
+		log.info("close RPCServer");
 		if (server != null) {
 			server.stop();
 		}

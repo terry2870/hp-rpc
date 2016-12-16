@@ -14,32 +14,40 @@
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
+	<bean id="RPCServer" class="com.hp.rpc.server.RPCServer" init-method="init" destroy-method="close">
+		<property name="serverConfigBean" ref="RPCServerConfigBean" />
+	</bean>
+
 	<!-- 装在properties文件 -->
-	<!-- <context:property-placeholder location="classpath*:config.properties" /> -->
-		
+	<context:property-placeholder location="classpath*:config.properties" />
+	
+	<context:component-scan base-package="com.hp.rpc" />
+	
 	<bean id="RPCServerConfigBean" class="com.hp.rpc.model.RPCServerConfigBean">
 		<!-- <property name="threadSize" value="" /> -->
-		<property name="port" value="8888" />
+		<property name="port" value="9999" />
 		<!-- <property name="forbidPackages" value="" />
-		<property name="forbidClasses" value="" />
-		<property name="forbidClassMethods" value="" /> -->
+		<property name="forbidClasses" value="" /> -->
+		<property name="forbidClassMethods">
+			<list>
+				<value>com.hp.rpc.test.service.ITestService.test2</value>
+			</list>
+		</property>
 		<property name="allowPackages">
 			<list>
-				<value>com.hp.rpc</value>
+				<value>com.hp.rpc.test.service</value>
 			</list>
 		</property>
 		<!-- <property name="allowClasses" value="" />
 		<property name="allowClassMethods" value="" /> -->
 	</bean>
 	
-	<bean id="ServiceRegistry" class="com.hp.rpc.server.ServiceRegistry" init-method="init" destroy-method="close">
+	<bean id="ServiceRegistry" class="com.hp.rpc.server.ServiceRegistry" destroy-method="close">
 		<property name="serverConfigBean" ref="RPCServerConfigBean" />
 		<property name="serviceDiscoveryFactory" ref="serviceDiscoveryFactory" />
 	</bean>
 	
-	<bean id="RPCServer" class="com.hp.rpc.server.RPCServer" init-method="init" destroy-method="close">
-		<property name="serverConfigBean" ref="RPCServerConfigBean" />
-	</bean>
+	
 
 </beans>
 

@@ -13,15 +13,24 @@
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+	<!-- 装在properties文件 -->
+	<context:property-placeholder location="classpath*:config.properties" />
 
-	<bean id="serviceDiscoveryFactoryBean" class="com.hp.rpc.common.discovery.ServiceDiscoveryFactoryBean" init-method="init" destroy-method="close">
-		<property name="basePath" value="${zk.basePath:/yh/rpcservice}" />
-		<property name="curator" ref="curatorFrameworkFactory" />
-	</bean>
+	<!-- <bean id="BeanProxy" class="com.hp.rpc.test.BeanProxy" init-method="init" /> -->
 	
-	<bean id="serviceDiscoveryFactory" class="com.hp.rpc.common.discovery.ServiceDiscoveryFactory" destroy-method="close">
-		<property name="serviceDiscovery" ref="serviceDiscoveryFactoryBean" />
+	
+	<bean id="SimpleBeanDefinitionRegistry" class="org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry" />
+	
+	<bean class="com.hp.rpc.test.Sacn">
+		<constructor-arg ref="SimpleBeanDefinitionRegistry" />
 	</bean>
+
+	
+	
+	<!-- <context:component-scan base-package="com.hp.rpc.test.p2" /> -->
+	
+	
+		
 
 </beans>
 
