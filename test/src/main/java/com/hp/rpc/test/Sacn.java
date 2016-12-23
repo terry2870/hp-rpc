@@ -5,6 +5,7 @@ package com.hp.rpc.test;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -14,12 +15,16 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.Assert;
+
+import com.hp.rpc.test.service.impl.TestServiceImpl;
+import com.hp.tools.common.utils.SpringContextUtil;
 
 /**
  * 扫描所有的需要调用远端接口的服务，并自动生成代理实现类
@@ -31,7 +36,7 @@ public class Sacn extends ClassPathBeanDefinitionScanner {
 	static Logger log = LoggerFactory.getLogger(Sacn.class);
 	
 	private BeanDefinitionRegistry registry;
-	
+		
 	/**
 	 * @param registry
 	 */
@@ -39,7 +44,25 @@ public class Sacn extends ClassPathBeanDefinitionScanner {
 		super(registry);
 		this.registry = registry;
 		System.out.println("start Sacn");
-		scan("com.hp.rpc.test.p2");
+		
+		try {
+			//SpringContextUtil.loadBean("TestServiceImpl", TestServiceImpl.class, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		SpringContextUtil.getBean(DefaultListableBeanFactory.class);
+		//Map<String, BeanDefinitionRegistry> map = SpringContextUtil.getBeansOfType(BeanDefinitionRegistry.class);
+		
+		//log.info("map= {}", map);
+		//scan("com.hp.rpc.test.service.impl");
+		
+		Set<BeanDefinitionHolder> set = doScan("com.hp.rpc.test.service.impl");
+		String[] arr = registry.getBeanDefinitionNames();
+		for (String str : arr) {
+			System.out.println("beanName= " + str);
+		}
+		System.out.println(set);
+		
 		System.out.println("end Sacn");
 	}
 	

@@ -19,5 +19,9 @@
 			<groupId>com.hp.rpc</groupId>
 			<artifactId>hp-rpc-server</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.hp.rpc</groupId>
+			<artifactId>hp-rpc-client</artifactId>
+		</dependency>
 	</dependencies>
 </project>

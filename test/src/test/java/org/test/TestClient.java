@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.hp.rpc.test.bean.UserBean;
-import com.hp.rpc.test.p2.ITest1;
-import com.hp.rpc.test.service.ITestService;
+import com.hp.rpc.test.p2.pp.ITest5;
 
 /**
  * @author ping.huang
@@ -25,18 +23,23 @@ public class TestClient {
 		System.out.println("TestClient init ");
 	}
 	
-//	@Autowired
-//	ITestService testService;
+	/*@Autowired
+	ITestService testService;*/
 	
 	@Autowired
-	ITest1 t1;
+	ITest5 t5;
 	
 	@Test
 	public void t() {
-//		UserBean u = testService.test2(new UserBean("name1", 1, "139"));
-//		System.out.println(u);
-		System.out.println("fffffffffffffffffffffffff");
-		System.out.println("aaaa= " + t1.str());
+		
+		System.out.println("t5= " + t5.str5());
+		
+		
+		
+		/*UserBean u = testService.test2(new UserBean("name1", 1, "139"));
+		System.out.println(u);
+		System.out.println("fffffffffffffffffffffffff");*/
+		//System.out.println("aaaa= " + t1.str());
 	}
 	
 	public static void main(String[] args) {

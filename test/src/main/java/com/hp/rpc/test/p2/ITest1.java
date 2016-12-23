@@ -9,5 +9,5 @@ package com.hp.rpc.test.p2;
  */
 public interface ITest1 {
 
-	public String str();
+	public String str1();
 }

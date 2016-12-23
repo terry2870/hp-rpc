@@ -16,16 +16,30 @@
 	<!-- 装在properties文件 -->
 	<context:property-placeholder location="classpath*:config.properties" />
 
+	<bean class="com.hp.tools.common.utils.SpringContextUtil" />
+	
+	<bean id="RPCProxyFactory" class="com.hp.rpc.client.proxy.RPCProxyFactory" />
+	<bean id="RPCRegistry" class="com.hp.rpc.client.proxy.RPCRegistry" />
+	<bean id="RPCFactoryBean" class="com.hp.rpc.client.proxy.RPCFactoryBean">
+		<property name="RPCRegistry" ref="RPCRegistry" />
+	</bean>
+	
+	<bean class="com.hp.rpc.client.discovery.RPCServiceScan" init-method="init">
+		<constructor-arg value="false" />
+		<!-- <property name="proxyFactory" ref="PRCProxyFactory" /> -->
+		<property name="basePackages" value="com.hp.rpc.test.p2.pp" />
+	</bean>
+
 	<!-- <bean id="BeanProxy" class="com.hp.rpc.test.BeanProxy" init-method="init" /> -->
 	
 	
-	<bean id="SimpleBeanDefinitionRegistry" class="org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry" />
+	<!-- <bean id="SimpleBeanDefinitionRegistry" class="org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry" />
 	
 	<bean class="com.hp.rpc.test.Sacn">
 		<constructor-arg ref="SimpleBeanDefinitionRegistry" />
-	</bean>
+	</bean> -->
 
-	
+	<!-- <bean class="com.hp.rpc.test.Load" init-method="init" /> -->
 	
 	<!-- <context:component-scan base-package="com.hp.rpc.test.p2" /> -->
 	
