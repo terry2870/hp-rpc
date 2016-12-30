@@ -4,48 +4,37 @@
 package com.hp.rpc.client.discovery;
 
 import java.io.IOException;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.RuntimeBeanReference;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.hp.rpc.client.proxy.RPCProxyFactory;
-import com.hp.tools.common.utils.SpringContextUtil;
+import com.hp.rpc.client.proxy.RPCFactoryBean;
+import com.hp.rpc.client.proxy.RPCRegistry;
 
 /**
  * @author ping.huang 2016年12月20日
  */
-public class ClassPathRPCScanner extends ClassPathBeanDefinitionScanner {
+public class RPCClassPathScanner extends ClassPathBeanDefinitionScanner {
 
+	private RPCRegistry rpcRegistry;
+	
 	/**
 	 * @param registry
 	 */
-	public ClassPathRPCScanner(BeanDefinitionRegistry registry) {
+	public RPCClassPathScanner(BeanDefinitionRegistry registry) {
 		super(registry);
-
 	}
 
-	static Logger log = LoggerFactory.getLogger(ClassPathRPCScanner.class);
+	static Logger log = LoggerFactory.getLogger(RPCClassPathScanner.class);
 
 	/*
 	 * public void init() throws Exception { Assert.hasText(basePackages,
@@ -76,44 +65,19 @@ public class ClassPathRPCScanner extends ClassPathBeanDefinitionScanner {
 
 			log.debug("Creating MapperFactoryBean with name '{}' and '{}' mapperInterface", holder.getBeanName(), definition.getBeanClassName() );
 
-			// the mapper interface is the original class of the bean
-			// but, the actual class of the bean is MapperFactoryBean
-			definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
-			definition.setBeanClass(MapperFactoryBean.class);
-
-			definition.getPropertyValues().add("addToConfig", this.addToConfig);
-
-			boolean explicitFactoryUsed = false;
-			if (StringUtils.hasText(this.sqlSessionFactoryBeanName)) {
-				definition.getPropertyValues().add("sqlSessionFactory", new RuntimeBeanReference(this.sqlSessionFactoryBeanName));
-				explicitFactoryUsed = true;
-			} else if (this.sqlSessionFactory != null) {
-				definition.getPropertyValues().add("sqlSessionFactory", this.sqlSessionFactory);
-				explicitFactoryUsed = true;
-			}
-
-			if (StringUtils.hasText(this.sqlSessionTemplateBeanName)) {
-				if (explicitFactoryUsed) {
-					logger.warn("Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
-				}
-				definition.getPropertyValues().add("sqlSessionTemplate", new RuntimeBeanReference(this.sqlSessionTemplateBeanName));
-				explicitFactoryUsed = true;
-			} else if (this.sqlSessionTemplate != null) {
-				if (explicitFactoryUsed) {
-					logger.warn("Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
-				}
-				definition.getPropertyValues().add("sqlSessionTemplate", this.sqlSessionTemplate);
-				explicitFactoryUsed = true;
-			}
-
-			if (!explicitFactoryUsed) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'.");
-				}
-				definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+			try {
+				rpcRegistry.addRPCService(Class.forName(definition.getBeanClassName()));
+				definition.getPropertyValues().add("rpcRegistry", rpcRegistry);
+				
+				definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
+				definition.setBeanClass(RPCFactoryBean.class);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 
+		
+		
 		return beanDefinitions;
 	}
 
@@ -124,7 +88,7 @@ public class ClassPathRPCScanner extends ClassPathBeanDefinitionScanner {
 	 * @return
 	 * @throws Exception
 	 */
-	public Set<BeanDefinition> doScan2(String... basePackages) throws Exception {
+	/*public Set<BeanDefinition> doScan2(String... basePackages) throws Exception {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinition> beanDefinitions = new LinkedHashSet<>();
 		for (String basePackage : basePackages) {
@@ -144,7 +108,7 @@ public class ClassPathRPCScanner extends ClassPathBeanDefinitionScanner {
 			}
 		}
 		return beanDefinitions;
-	}
+	}*/
 
 	protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
 		log.info("metadataReader= " + metadataReader);
@@ -155,8 +119,8 @@ public class ClassPathRPCScanner extends ClassPathBeanDefinitionScanner {
 		return true;
 	}
 
-	public void setBasePackages(String basePackages) {
-		this.basePackages = basePackages;
+	public void setRpcRegistry(RPCRegistry rpcRegistry) {
+		this.rpcRegistry = rpcRegistry;
 	}
 
 }

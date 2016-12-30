@@ -15,20 +15,16 @@
 
 	<!-- 装在properties文件 -->
 	<context:property-placeholder location="classpath*:config.properties" />
-
-	<bean class="com.hp.tools.common.utils.SpringContextUtil" />
 	
-	<bean id="RPCProxyFactory" class="com.hp.rpc.client.proxy.RPCProxyFactory" />
-	<bean id="RPCRegistry" class="com.hp.rpc.client.proxy.RPCRegistry" />
-	<bean id="RPCFactoryBean" class="com.hp.rpc.client.proxy.RPCFactoryBean">
-		<property name="RPCRegistry" ref="RPCRegistry" />
-	</bean>
+	<bean id="rpcRegistry" class="com.hp.rpc.client.proxy.RPCRegistry" />
+	<bean id="RPCFactoryBean" class="com.hp.rpc.client.proxy.RPCFactoryBean" />
 	
-	<bean class="com.hp.rpc.client.discovery.RPCServiceScan" init-method="init">
-		<constructor-arg value="false" />
-		<!-- <property name="proxyFactory" ref="PRCProxyFactory" /> -->
+	<bean id="RPCScannerConfigurer" class="com.hp.rpc.client.discovery.RPCScannerConfigurer">
 		<property name="basePackages" value="com.hp.rpc.test.p2.pp" />
-	</bean>
+		<property name="rpcRegistry" ref="rpcRegistry" />
+	</bean>	
+	
+
 
 	<!-- <bean id="BeanProxy" class="com.hp.rpc.test.BeanProxy" init-method="init" /> -->
 	

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.hp.rpc.test.p2.pp.ITest4;
 import com.hp.rpc.test.p2.pp.ITest5;
 
 /**
@@ -28,11 +29,14 @@ public class TestClient {
 	
 	@Autowired
 	ITest5 t5;
+	@Autowired
+	ITest4 t4;
 	
 	@Test
 	public void t() {
 		
-		System.out.println("t5= " + t5.str5());
+		System.out.println("t5= " + t5.str5().toString());
+		System.out.println("t4= " + t4.str4().toString());
 		
 		
 		

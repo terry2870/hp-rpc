@@ -10,6 +10,8 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 
+import com.hp.rpc.client.proxy.RPCRegistry;
+
 /**
  * @author ping.huang
  * 2016年12月22日
@@ -19,6 +21,7 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 	static Logger log = LoggerFactory.getLogger(RPCScannerConfigurer.class);
 	
 	private String basePackages;
+	private RPCRegistry rpcRegistry;
 	
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -28,8 +31,9 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-		ClassPathRPCScanner scan = new ClassPathRPCScanner(registry);
-		scan.scan();
+		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
+		scan.setRpcRegistry(rpcRegistry);
+		scan.scan(basePackages);
 	}
 
 	public String getBasePackages() {
@@ -38,6 +42,14 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 
 	public void setBasePackages(String basePackages) {
 		this.basePackages = basePackages;
+	}
+
+	public RPCRegistry getRpcRegistry() {
+		return rpcRegistry;
+	}
+
+	public void setRpcRegistry(RPCRegistry rpcRegistry) {
+		this.rpcRegistry = rpcRegistry;
 	}
 
 }

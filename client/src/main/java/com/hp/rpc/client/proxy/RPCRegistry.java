@@ -22,7 +22,7 @@ public class RPCRegistry {
 	private static Map<Class<?>, RPCProxyFactory<?>> knownRPCs = new HashMap<Class<?>, RPCProxyFactory<?>>();
 
 	@SuppressWarnings("unchecked")
-	public <T> T getRPC(Class<T> type) throws BindingException {
+	public <T> T getRPCService(Class<T> type) throws BindingException {
 		final RPCProxyFactory<T> rpcProxyFactory = (RPCProxyFactory<T>) knownRPCs.get(type);
 		if (rpcProxyFactory == null) {
 			throw new BindingException("Type " + type + " is not known to the RPCRegistry.");
@@ -38,7 +38,7 @@ public class RPCRegistry {
 		return knownRPCs.containsKey(type);
 	}
 
-	public <T> void addRPC(Class<T> type) {
+	public <T> void addRPCService(Class<T> type) {
 		if (!type.isInterface()) {
 			return;
 		}

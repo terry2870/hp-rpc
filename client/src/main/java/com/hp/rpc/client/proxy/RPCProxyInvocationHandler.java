@@ -27,7 +27,8 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		return new T(method.getDeclaringClass(), method.getName());
+		System.out.println("1111111111111111111");
+		return new T(method.getDeclaringClass(), method.getName()).toString();
 	}
 
 	public Class<?> getClazz() {

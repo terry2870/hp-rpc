@@ -13,11 +13,11 @@ public class RPCFactoryBean<T> implements FactoryBean<T> {
 
 	private Class<T> mapperInterface;
 	
-	private RPCRegistry RPCRegistry;
+	private RPCRegistry rpcRegistry;
 	
 	@Override
 	public T getObject() throws Exception {
-		return RPCRegistry.getRPC(mapperInterface);
+		return rpcRegistry.getRPCService(mapperInterface);
 	}
 
 	@Override
@@ -38,12 +38,8 @@ public class RPCFactoryBean<T> implements FactoryBean<T> {
 		this.mapperInterface = mapperInterface;
 	}
 
-	public RPCRegistry getRPCRegistry() {
-		return RPCRegistry;
-	}
-
-	public void setRPCRegistry(RPCRegistry rPCRegistry) {
-		RPCRegistry = rPCRegistry;
+	public void setRpcRegistry(RPCRegistry rpcRegistry) {
+		this.rpcRegistry = rpcRegistry;
 	}
 
 }
