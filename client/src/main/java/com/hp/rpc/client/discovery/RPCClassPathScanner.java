@@ -26,7 +26,7 @@ import com.hp.rpc.client.proxy.RPCRegistry;
 public class RPCClassPathScanner extends ClassPathBeanDefinitionScanner {
 
 	private RPCRegistry rpcRegistry;
-	
+
 	/**
 	 * @param registry
 	 */
@@ -35,23 +35,6 @@ public class RPCClassPathScanner extends ClassPathBeanDefinitionScanner {
 	}
 
 	static Logger log = LoggerFactory.getLogger(RPCClassPathScanner.class);
-
-	/*
-	 * public void init() throws Exception { Assert.hasText(basePackages,
-	 * "basePackages must not empty.");
-	 * 
-	 * //获取多有需要调用远程的接口 Set<BeanDefinition> beanDefinitionSet =
-	 * doScan(basePackages); if (CollectionUtils.isEmpty(beanDefinitionSet)) {
-	 * log.warn("can not scan service with basePackages={}", basePackages);
-	 * return; }
-	 * 
-	 * //生成代理类 for (BeanDefinition bean : beanDefinitionSet) { Class<?> clazz =
-	 * Class.forName(bean.getBeanClassName()); Object obj = new
-	 * RPCProxyFactory(clazz).create(); //动态注册到spring工场
-	 * SpringContextUtil.loadBean(BeanDefinitionReaderUtils.generateBeanName(
-	 * bean, SpringContextUtil.getBeanDefinitionRegistry()), obj.getClass()); }
-	 * }
-	 */
 
 	@Override
 	public Set<BeanDefinitionHolder> doScan(String... basePackages) {
@@ -63,60 +46,28 @@ public class RPCClassPathScanner extends ClassPathBeanDefinitionScanner {
 		for (BeanDefinitionHolder holder : beanDefinitions) {
 			GenericBeanDefinition definition = (GenericBeanDefinition) holder.getBeanDefinition();
 
-			log.debug("Creating MapperFactoryBean with name '{}' and '{}' mapperInterface", holder.getBeanName(), definition.getBeanClassName() );
+			log.debug("Creating MapperFactoryBean with name '{}' and '{}' mapperInterface", holder.getBeanName(), definition.getBeanClassName());
 
 			try {
 				rpcRegistry.addRPCService(Class.forName(definition.getBeanClassName()));
 				definition.getPropertyValues().add("rpcRegistry", rpcRegistry);
-				
+
 				definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
 				definition.setBeanClass(RPCFactoryBean.class);
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				log.error("Registry beanDefinition error. with class={}", definition.getBeanClassName());
 			}
 		}
 
-		
-		
 		return beanDefinitions;
 	}
 
-	/**
-	 * 扫描所有需要远程调用的接口
-	 * 
-	 * @param basePackages
-	 * @return
-	 * @throws Exception
-	 */
-	/*public Set<BeanDefinition> doScan2(String... basePackages) throws Exception {
-		Assert.notEmpty(basePackages, "At least one base package must be specified");
-		Set<BeanDefinition> beanDefinitions = new LinkedHashSet<>();
-		for (String basePackage : basePackages) {
-			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
-			if (CollectionUtils.isEmpty(candidates)) {
-				// 没有扫码到，跳过
-				continue;
-			}
-			for (BeanDefinition bean : candidates) {
-				bean.setParentName(parentName);
-				Class<?> clazz = Class.forName(bean.getBeanClassName());
-				if (!clazz.isInterface()) {
-					// 不是接口的，跳过
-					continue;
-				}
-				beanDefinitions.add(bean);
-			}
-		}
-		return beanDefinitions;
-	}*/
-
 	protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
-		log.info("metadataReader= " + metadataReader);
 		return true;
 	}
 
 	protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
-		return true;
+		return (beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent());
 	}
 
 	public void setRpcRegistry(RPCRegistry rpcRegistry) {

@@ -14,10 +14,9 @@ public class TestServer {
 		ServiceRegistry s = ctx.getBean(ServiceRegistry.class);
 		System.out.println("ServiceRegistry= " + s);
 		try {
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+//			Thread.sleep(10000);
+			System.in.read();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		ctx.start();

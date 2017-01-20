@@ -36,6 +36,7 @@
 		<property name="allowPackages">
 			<list>
 				<value>com.hp.rpc.test.service</value>
+				<value>com.hp.rpc.test.p2.pp</value>
 			</list>
 		</property>
 		<!-- <property name="allowClasses" value="" />

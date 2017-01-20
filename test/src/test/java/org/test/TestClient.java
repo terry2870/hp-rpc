@@ -3,29 +3,32 @@
  */
 package org.test;
 
+import java.io.IOException;
+
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.hp.rpc.test.bean.UserBean;
 import com.hp.rpc.test.p2.pp.ITest4;
 import com.hp.rpc.test.p2.pp.ITest5;
+import com.hp.rpc.test.service.ITestService;
 
 /**
  * @author ping.huang
  * 2016年12月14日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:META-INF/spring/spring-rpc-client.xml"})
+@ContextConfiguration(locations = {"classpath*:META-INF/spring/spring*.xml"})
 public class TestClient {
 
 	public TestClient() {
 		System.out.println("TestClient init ");
 	}
-	
-	/*@Autowired
-	ITestService testService;*/
 	
 	@Autowired
 	ITest5 t5;
@@ -35,8 +38,14 @@ public class TestClient {
 	@Test
 	public void t() {
 		
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("t5= " + t5.str5().toString());
-		System.out.println("t4= " + t4.str4().toString());
+//		System.out.println("t4= " + t4.str4().toString());
 		
 		
 		

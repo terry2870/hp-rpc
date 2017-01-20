@@ -7,7 +7,13 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import org.apache.curator.x.discovery.ServiceInstance;
+
+import com.hp.core.zookeeper.bean.RegisterInstanceDetail;
+import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
+import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactoryBean;
 import com.hp.tools.common.beans.BaseBean;
+import com.hp.tools.common.utils.SpringContextUtil;
 
 /**
  * @author ping.huang
@@ -19,6 +25,9 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	 * 
 	 */
 	private static final long serialVersionUID = 295866342274805408L;
+	
+	private static ServiceDiscoveryFactory discovery = SpringContextUtil.getBean(ServiceDiscoveryFactory.class);
+	
 	private Class<?> clazz;
 	
 	public RPCProxyInvocationHandler(Class<?> clazz) {
@@ -27,7 +36,8 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		System.out.println("1111111111111111111");
+		ServiceInstance<RegisterInstanceDetail> serviceInstance = discovery.discoveryService(method.getDeclaringClass().getName() + "." + method.getName());
+		System.out.println("serviceInstance= " + serviceInstance.getPayload().toString());
 		return new T(method.getDeclaringClass(), method.getName()).toString();
 	}
 
