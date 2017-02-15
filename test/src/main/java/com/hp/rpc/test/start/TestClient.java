@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.test;
+package com.hp.rpc.test.start;
 
 import java.io.IOException;
 
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.hp.rpc.test.p2.ITest1;
 import com.hp.rpc.test.p2.pp.ITest5;
 
 /**
@@ -28,6 +29,9 @@ public class TestClient {
 	@Autowired
 	ITest5 t5;
 	
+	@Autowired
+	ITest1 t1;
+	
 	@Test
 	public void t() {
 		
@@ -38,6 +42,7 @@ public class TestClient {
 			e.printStackTrace();
 		}
 		System.out.println("t5= " + t5.str5().toString());
+		System.out.println("t1= " + t1.str1().toString());
 //		System.out.println("t4= " + t4.str4().toString());
 		
 		

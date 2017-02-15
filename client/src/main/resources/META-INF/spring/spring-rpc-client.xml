@@ -12,9 +12,6 @@
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-	<!-- 装在properties文件 -->
-	<context:property-placeholder location="classpath*:config.properties" />
 	
 	<bean id="rpcRegistry" class="com.hp.rpc.client.proxy.RPCRegistry" />
 	<bean id="RPCFactoryBean" class="com.hp.rpc.client.proxy.RPCFactoryBean" />
@@ -22,7 +19,7 @@
 	<bean id="RPCScannerConfigurer" class="com.hp.rpc.client.discovery.RPCScannerConfigurer">
 		<property name="basePackages" value="com.hp.rpc.test.p2.pp" />
 		<property name="rpcRegistry" ref="rpcRegistry" />
-	</bean>	
+	</bean>
 	
 
 

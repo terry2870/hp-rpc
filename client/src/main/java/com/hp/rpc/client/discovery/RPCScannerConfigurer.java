@@ -31,9 +31,10 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+		log.info("start to scan package with basePackages={}", basePackages);
 		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
 		scan.setRpcRegistry(rpcRegistry);
-		scan.scan(basePackages);
+		scan.scan(basePackages.split(","));
 	}
 
 	public String getBasePackages() {

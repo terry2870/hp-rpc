@@ -9,9 +9,12 @@ import java.lang.reflect.Method;
 
 import org.apache.curator.x.discovery.ServiceInstance;
 
+import com.hp.core.netty.client.Client;
+import com.hp.core.netty.client.NettyClient;
 import com.hp.core.zookeeper.bean.RegisterInstanceDetail;
 import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
 import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactoryBean;
+import com.hp.rpc.client.factory.NettyClientFactory;
 import com.hp.tools.common.beans.BaseBean;
 import com.hp.tools.common.utils.SpringContextUtil;
 
@@ -27,6 +30,7 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	private static final long serialVersionUID = 295866342274805408L;
 	
 	private static ServiceDiscoveryFactory discovery = SpringContextUtil.getBean(ServiceDiscoveryFactory.class);
+	private static NettyClientFactory nettyClientFactory = NettyClientFactory.getInstance();
 	
 	private Class<?> clazz;
 	
@@ -37,7 +41,15 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		ServiceInstance<RegisterInstanceDetail> serviceInstance = discovery.discoveryService(method.getDeclaringClass().getName() + "." + method.getName());
-		System.out.println("serviceInstance= " + serviceInstance.getPayload().toString());
+		
+		RegisterInstanceDetail detail = serviceInstance.getPayload();
+		Client client = nettyClientFactory.getNettyClient(detail.getLinstenAddress(), detail.getLinstenPort());
+		
+		if (client == null) {
+			
+		}
+		
+		
 		return new T(method.getDeclaringClass(), method.getName()).toString();
 	}
 
