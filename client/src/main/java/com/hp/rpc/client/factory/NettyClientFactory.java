@@ -42,7 +42,7 @@ public class NettyClientFactory {
 	 * @param port
 	 * @return
 	 */
-	public Client getNettyClient(String ip, int port) {
+	public Client getNettyClient(String ip, int port) throws Exception {
 		if (StringUtils.isEmpty(ip) || port == 0) {
 			log.warn("getNettyClient error. with param is error. with ip={}, port={}", ip, port);
 			return null;
@@ -50,7 +50,7 @@ public class NettyClientFactory {
 		String key = ip + "_" + port;
 		Client client = nettyClientMap.get(key);
 		if (client == null) {
-			client = new NettyClient(ip, port);
+			client = new NettyClient(ip, port).init();
 			nettyClientMap.put(key, client);
 		}
 		return client;

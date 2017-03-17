@@ -30,7 +30,7 @@ public class RPCRegistry {
 		try {
 			return rpcProxyFactory.newInstance();
 		} catch (BindingException e) {
-			throw new BindingException("Error getting mapper instance. Cause: " + e, e);
+			throw new BindingException("Error getting mapper instance. Cause: " + e.getMessage(), e);
 		}
 	}
 

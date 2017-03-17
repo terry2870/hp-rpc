@@ -3,6 +3,8 @@
  */
 package com.hp.rpc.model;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.hp.core.netty.bean.NettyRequest;
 
 /**
@@ -72,6 +74,12 @@ public class RPCRequestBean extends NettyRequest {
 
 	public void setParameters(Object[] parameters) {
 		this.parameters = parameters;
+		if (ArrayUtils.isNotEmpty(parameters)) {
+			parameterTypes = new Class[parameters.length];
+			for (int i = 0; i < parameterTypes.length; i++) {
+				parameterTypes[i] = parameters[i].getClass();
+			}
+		}
 	}
 
 	public Class<?> getReturnType() {

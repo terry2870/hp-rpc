@@ -60,6 +60,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 					serviceBean = applicationContext.getBean(bean.getClassName());
 				}
 				if (serviceBean == null) {
+					log.warn("process error. with getBean error. with request={}", request);
 					throw new BeanNoFoundException("can not found bean of beanName="+ bean.getBeanName() +" or className=" + bean.getClassName() + ". with messageId=" + bean.getMessageId());
 				}
 				

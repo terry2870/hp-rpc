@@ -8,13 +8,15 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import org.apache.curator.x.discovery.ServiceInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.core.netty.client.Client;
-import com.hp.core.netty.client.NettyClient;
 import com.hp.core.zookeeper.bean.RegisterInstanceDetail;
 import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
-import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactoryBean;
 import com.hp.rpc.client.factory.NettyClientFactory;
+import com.hp.rpc.common.exceptions.ServiceNoFoundException;
+import com.hp.rpc.model.RPCRequestBean;
 import com.hp.tools.common.beans.BaseBean;
 import com.hp.tools.common.utils.SpringContextUtil;
 
@@ -29,6 +31,8 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	 */
 	private static final long serialVersionUID = 295866342274805408L;
 	
+	static Logger log = LoggerFactory.getLogger(RPCProxyInvocationHandler.class);
+	
 	private static ServiceDiscoveryFactory discovery = SpringContextUtil.getBean(ServiceDiscoveryFactory.class);
 	private static NettyClientFactory nettyClientFactory = NettyClientFactory.getInstance();
 	
@@ -40,17 +44,30 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		ServiceInstance<RegisterInstanceDetail> serviceInstance = discovery.discoveryService(method.getDeclaringClass().getName() + "." + method.getName());
+		
+		String serverName = method.getDeclaringClass().getName() + "." + method.getName();
+		ServiceInstance<RegisterInstanceDetail> serviceInstance = discovery.discoveryService(serverName);
+		
+		//找不到服务
+		if (serviceInstance == null) {
+			log.warn("find service from zk error. with serverName={}", serverName);
+			throw new ServiceNoFoundException("find service from zk error. with serverName=" + serverName);
+		}
 		
 		RegisterInstanceDetail detail = serviceInstance.getPayload();
 		Client client = nettyClientFactory.getNettyClient(detail.getLinstenAddress(), detail.getLinstenPort());
 		
 		if (client == null) {
-			
+			log.warn("find service from zk error. with serverName={}", serverName);
+			throw new ServiceNoFoundException("find service from zk error. with serverName=" + serverName);
 		}
 		
-		
-		return new T(method.getDeclaringClass(), method.getName()).toString();
+		//组装请求对象
+		RPCRequestBean request = new RPCRequestBean();
+		request.setClassName(method.getDeclaringClass());
+		request.setMethodName(method.getName());
+		request.setParameters(args);
+		return client.send(request);
 	}
 
 	public Class<?> getClazz() {

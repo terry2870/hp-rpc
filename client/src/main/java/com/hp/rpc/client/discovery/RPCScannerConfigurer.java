@@ -6,6 +6,7 @@ package com.hp.rpc.client.discovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -23,6 +24,17 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 	private String basePackages;
 	private RPCRegistry rpcRegistry;
 	
+	@Value("${zk.basePath}")
+	private String zkBasePath;
+	
+	public RPCScannerConfigurer() {
+		log.info("RPCScannerConfigurer init");
+	}
+	
+	public void init() throws Exception {
+		log.info("RPCScannerConfigurer init2");
+	}
+	
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		// TODO Auto-generated method stub
@@ -32,9 +44,9 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
 		log.info("start to scan package with basePackages={}", basePackages);
-		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
-		scan.setRpcRegistry(rpcRegistry);
-		scan.scan(basePackages.split(","));
+//		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
+//		scan.setRpcRegistry(rpcRegistry);
+//		scan.scan(basePackages.split(","));
 	}
 
 	public String getBasePackages() {
@@ -52,5 +64,6 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 	public void setRpcRegistry(RPCRegistry rpcRegistry) {
 		this.rpcRegistry = rpcRegistry;
 	}
+
 
 }

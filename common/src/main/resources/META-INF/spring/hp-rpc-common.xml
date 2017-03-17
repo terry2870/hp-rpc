@@ -14,9 +14,21 @@
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-
 	<!-- 装在properties文件 -->
-	<context:property-placeholder location="classpath*:config.properties" />
-
+	<context:property-placeholder location="classpath*:*.properties" />
+	
+	<!-- <bean id="prop" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath*:config.properties</value>
+			</array>
+		</property>
+	</bean> -->
+	
+	
+	<bean id="SpringContextUtil" class="com.hp.tools.common.utils.SpringContextUtil" />
+	
+	<import resource="classpath*:META-INF/spring/hp-core-zookeeper.xml"/>
+	<import resource="classpath*:META-INF/spring/hp-rpc-client.xml"/>
 </beans>
 
