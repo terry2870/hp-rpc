@@ -3,37 +3,29 @@
  */
 package com.hp.rpc.client.discovery;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 
 import com.hp.rpc.client.proxy.RPCRegistry;
+import com.netflix.config.DynamicPropertyFactory;
 
 /**
  * @author ping.huang
  * 2016年12月22日
  */
-public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor {
+public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor, InitializingBean {
 	
 	static Logger log = LoggerFactory.getLogger(RPCScannerConfigurer.class);
 	
 	private String basePackages;
 	private RPCRegistry rpcRegistry;
-	
-	@Value("${zk.basePath}")
-	private String zkBasePath;
-	
-	public RPCScannerConfigurer() {
-		log.info("RPCScannerConfigurer init");
-	}
-	
-	public void init() throws Exception {
-		log.info("RPCScannerConfigurer init2");
-	}
+
 	
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -44,9 +36,14 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
 		log.info("start to scan package with basePackages={}", basePackages);
-//		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
-//		scan.setRpcRegistry(rpcRegistry);
-//		scan.scan(basePackages.split(","));
+		if (StringUtils.isEmpty(basePackages)) {
+			basePackages = DynamicPropertyFactory.getInstance().getStringProperty("rpc.client.scan.basePackages", "").get();
+		}
+		log.info("start to scan package with basePackages={}", basePackages);
+		
+		RPCClassPathScanner scan = new RPCClassPathScanner(registry);
+		scan.setRpcRegistry(rpcRegistry);
+		scan.scan(basePackages.split(","));
 	}
 
 	public String getBasePackages() {
@@ -63,6 +60,11 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 
 	public void setRpcRegistry(RPCRegistry rpcRegistry) {
 		this.rpcRegistry = rpcRegistry;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		log.info("basePackages= " + basePackages);
 	}
 
 

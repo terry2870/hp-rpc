@@ -11,6 +11,7 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public class RPCFactoryBean<T> implements FactoryBean<T> {
 
+	
 	private Class<T> mapperInterface;
 	
 	private RPCRegistry rpcRegistry;

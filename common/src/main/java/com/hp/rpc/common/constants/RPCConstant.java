@@ -23,4 +23,6 @@ public class RPCConstant {
 	//本机ip
 	public static final String localIp = StringUtil.fetchLocalIP();
 	
+	public static final String SERVICE_REGISTRY_CLASS_SPLIT = ",";
+	
 }

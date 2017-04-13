@@ -3,9 +3,7 @@
  */
 package com.hp.rpc.model;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hp.tools.common.beans.BaseBean;
 
@@ -35,39 +33,39 @@ public class RPCServerConfigBean extends BaseBean {
 	/**
 	 * 禁止远程调用的包名（前缀匹配）
 	 */
-	private List<String> forbidPackages;
+	private String forbidPackages;
 	
 	/**
 	 * 禁止远程调用的类名（完全匹配）
 	 */
-	private List<String> forbidClasses;
+	private String forbidClasses;
 	
 	/**
 	 * 禁止远程调用的类名+方法名（完全匹配）
 	 */
-	private List<String> forbidClassMethods;
+	private String forbidClassMethods;
 	
 	/**
 	 * 允许远程调用的包名（前缀匹配）
 	 */
-	private List<String> allowPackages;
+	private String allowPackages;
 	
 	/**
 	 * 允许远程调用的类名（完全匹配）
 	 */
-	private List<String> allowClasses;
+	private String allowClasses;
 	
 	/**
 	 * 允许远程调用的类名+方法名（完全匹配）
 	 */
-	private List<String> allowClassMethods;
+	private String allowClassMethods;
 	
 	/**
 	 * 是否配置了允许策略
 	 * @return
 	 */
 	public boolean allowConfig() {
-		return CollectionUtils.isNotEmpty(allowPackages) || CollectionUtils.isNotEmpty(allowClasses) || CollectionUtils.isNotEmpty(allowClassMethods);
+		return StringUtils.isNotEmpty(allowPackages) || StringUtils.isNotEmpty(allowClasses) || StringUtils.isNotEmpty(allowClassMethods);
 	}
 	
 	/**
@@ -75,30 +73,30 @@ public class RPCServerConfigBean extends BaseBean {
 	 * @return
 	 */
 	public boolean forbidConfig() {
-		return CollectionUtils.isNotEmpty(forbidPackages) || CollectionUtils.isNotEmpty(forbidClasses) || CollectionUtils.isNotEmpty(forbidClassMethods);
+		return StringUtils.isNotEmpty(forbidPackages) || StringUtils.isNotEmpty(forbidClasses) || StringUtils.isNotEmpty(forbidClassMethods);
 	}
 
-	public List<String> getForbidPackages() {
+	public String getForbidPackages() {
 		return forbidPackages;
 	}
 
-	public void setForbidPackages(List<String> forbidPackages) {
+	public void setForbidPackages(String forbidPackages) {
 		this.forbidPackages = forbidPackages;
 	}
 
-	public List<String> getForbidClasses() {
+	public String getForbidClasses() {
 		return forbidClasses;
 	}
 
-	public void setForbidClasses(List<String> forbidClasses) {
+	public void setForbidClasses(String forbidClasses) {
 		this.forbidClasses = forbidClasses;
 	}
 
-	public List<String> getForbidClassMethods() {
+	public String getForbidClassMethods() {
 		return forbidClassMethods;
 	}
 
-	public void setForbidClassMethods(List<String> forbidClassMethods) {
+	public void setForbidClassMethods(String forbidClassMethods) {
 		this.forbidClassMethods = forbidClassMethods;
 	}
 
@@ -110,27 +108,27 @@ public class RPCServerConfigBean extends BaseBean {
 		this.threadSize = threadSize;
 	}
 
-	public List<String> getAllowPackages() {
+	public String getAllowPackages() {
 		return allowPackages;
 	}
 
-	public void setAllowPackages(List<String> allowPackages) {
+	public void setAllowPackages(String allowPackages) {
 		this.allowPackages = allowPackages;
 	}
 
-	public List<String> getAllowClasses() {
+	public String getAllowClasses() {
 		return allowClasses;
 	}
 
-	public void setAllowClasses(List<String> allowClasses) {
+	public void setAllowClasses(String allowClasses) {
 		this.allowClasses = allowClasses;
 	}
 
-	public List<String> getAllowClassMethods() {
+	public String getAllowClassMethods() {
 		return allowClassMethods;
 	}
 
-	public void setAllowClassMethods(List<String> allowClassMethods) {
+	public void setAllowClassMethods(String allowClassMethods) {
 		this.allowClassMethods = allowClassMethods;
 	}
 

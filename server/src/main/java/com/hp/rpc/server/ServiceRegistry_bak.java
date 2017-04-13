@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.zookeeper.CreateMode;
@@ -138,8 +137,8 @@ public class ServiceRegistry_bak implements BeanPostProcessor, Closeable {
 		String packageName = clazz.getPackage().getName();
 		String className = clazz.getName();
 		//检查是否在禁止的包下面
-		if (CollectionUtils.isNotEmpty(serverConfigBean.getForbidPackages())) {
-			for (String str : serverConfigBean.getForbidPackages()) {
+		if (StringUtils.isNotEmpty(serverConfigBean.getForbidPackages())) {
+			for (String str : serverConfigBean.getForbidPackages().split(RPCConstant.SERVICE_REGISTRY_CLASS_SPLIT)) {
 				if (packageName.startsWith(str)) {
 					log.warn("checkClassAndPackage error. with interface is in forbidden package. with class={}", clazz);
 					return false;
@@ -148,14 +147,14 @@ public class ServiceRegistry_bak implements BeanPostProcessor, Closeable {
 		}
 		
 		//检查是否是禁止的类
-		if (CollectionUtils.isNotEmpty(serverConfigBean.getForbidClasses()) && serverConfigBean.getForbidClasses().contains(className)) {
+		if (StringUtils.isNotEmpty(serverConfigBean.getForbidClasses()) && serverConfigBean.getForbidClasses().contains(className)) {
 			log.warn("checkClassAndPackage error. with interface is forbidden. with class={}", clazz);
 			return false;
 		}
 		
 		//检查是否在允许的包内
-		if (CollectionUtils.isNotEmpty(serverConfigBean.getAllowPackages())) {
-			for (String str : serverConfigBean.getAllowPackages()) {
+		if (StringUtils.isNotEmpty(serverConfigBean.getAllowPackages())) {
+			for (String str : serverConfigBean.getAllowPackages().split(RPCConstant.SERVICE_REGISTRY_CLASS_SPLIT)) {
 				if (packageName.startsWith(str)) {
 					return true;
 				}
@@ -163,7 +162,7 @@ public class ServiceRegistry_bak implements BeanPostProcessor, Closeable {
 		}
 		
 		//检查是否是允许的类
-		if (CollectionUtils.isNotEmpty(serverConfigBean.getAllowClasses()) && serverConfigBean.getAllowClasses().contains(className)) {
+		if (StringUtils.isNotEmpty(serverConfigBean.getAllowClasses()) && serverConfigBean.getAllowClasses().contains(className)) {
 			return true;
 		}
 		
@@ -225,13 +224,13 @@ public class ServiceRegistry_bak implements BeanPostProcessor, Closeable {
 		}
 		
 		//判断该方法是否在被禁止的范围内
-		if (CollectionUtils.isNotEmpty(serverConfigBean.getForbidClassMethods()) && serverConfigBean.getForbidClassMethods().contains(className + "." + methodName)) {
+		if (StringUtils.isNotEmpty(serverConfigBean.getForbidClassMethods()) && serverConfigBean.getForbidClassMethods().contains(className + "." + methodName)) {
 			log.warn("checkMethod error. with method is forbidden. with className={}, methodName={}", className, methodName);
 			return false;
 		}
 		
 		//判断该方法是否在允许的范围内
-		if (CollectionUtils.isEmpty(serverConfigBean.getAllowClassMethods())) {
+		if (StringUtils.isEmpty(serverConfigBean.getAllowClassMethods())) {
 			return true;
 		}
 		if (serverConfigBean.getAllowClassMethods().contains(className + "." + methodName)) {

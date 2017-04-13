@@ -12,6 +12,10 @@
 	<groupId>com.hp.rpc</groupId>
 	<artifactId>hp-rpc</artifactId>
 	<packaging>pom</packaging>
+	
+	<properties>
+		<com.hp.core.version>0.0.1-SNAPSHOT</com.hp.core.version>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -47,17 +51,17 @@
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-zookeeper</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${com.hp.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-netty</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${com.hp.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-zookeeper</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${com.hp.core.version}</version>
 		</dependency>
 	</dependencies>
 	

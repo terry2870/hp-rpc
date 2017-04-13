@@ -51,7 +51,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 
 			@Override
 			public NettyResponse process(NettyRequest request) throws Exception {
-				log.debug("process start. with request={}", request);
+				log.info("process start. with request={}", request);
 				RPCRequestBean bean = (RPCRequestBean) request;
 				Object serviceBean = null;
 				if (StringUtils.isNotEmpty(bean.getBeanName())) {
@@ -65,7 +65,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 				}
 				
 				Object result = ObjectUtil.executeJavaMethod(serviceBean, bean.getMethodName(), bean.getParameterTypes(), bean.getParameters());
-				log.debug("process success. with request={}", request);
+				log.info("process success. with request={}", request);
 				return new NettyResponse(request.getMessageId(), result, bean.getReturnType());
 			}
 			

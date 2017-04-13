@@ -19,5 +19,10 @@
 			<groupId>com.hp.rpc</groupId>
 			<artifactId>hp-rpc-common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.netflix.archaius</groupId>
+			<artifactId>archaius-core</artifactId>
+			<version>0.7.5</version>
+		</dependency>
 	</dependencies>
 </project>

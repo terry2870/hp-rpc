@@ -16,9 +16,8 @@
 	<bean id="rpcRegistry" class="com.hp.rpc.client.proxy.RPCRegistry" />
 	<bean id="RPCFactoryBean" class="com.hp.rpc.client.proxy.RPCFactoryBean" />
 	
-	<bean id="RPCScannerConfigurer" class="com.hp.rpc.client.discovery.RPCScannerConfigurer" init-method="init">
-		<!-- <property name="basePackages" value="com.hp.rpc.test.p2.pp" /> -->
-		<property name="basePackages" value="${zk.connectString:127.0.0.1:2181}" />
+	<bean id="RPCScannerConfigurer" class="com.hp.rpc.client.discovery.RPCScannerConfigurer">
+		<!-- <property name="basePackages" value="${rpc.client.scan.basePackages:}" /> -->
 		<property name="rpcRegistry" ref="rpcRegistry" />
 	</bean>
 	
