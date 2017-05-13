@@ -11,6 +11,8 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.core.netty.bean.NettyRequest;
+import com.hp.core.netty.bean.NettyResponse;
 import com.hp.core.netty.client.Client;
 import com.hp.core.zookeeper.bean.RegisterInstanceDetail;
 import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
@@ -67,7 +69,9 @@ public class RPCProxyInvocationHandler implements InvocationHandler, Serializabl
 		request.setClassName(method.getDeclaringClass());
 		request.setMethodName(method.getName());
 		request.setParameters(args);
-		return client.send(request);
+		
+		NettyResponse response = client.send(new NettyRequest(request, RPCRequestBean.class));
+		return response.getData();
 	}
 
 	public Class<?> getClazz() {

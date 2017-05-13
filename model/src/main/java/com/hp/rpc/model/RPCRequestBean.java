@@ -5,21 +5,18 @@ package com.hp.rpc.model;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.hp.core.netty.bean.NettyRequest;
+import com.hp.tools.common.beans.BaseBean;
 
 /**
  * @author ping.huang
  * 2016年12月6日
  */
-public class RPCRequestBean extends NettyRequest {
-
+public class RPCRequestBean extends BaseBean {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4214323567406179850L;
-
-	//调用的bean对象
-	private Class<?> className;
+	private static final long serialVersionUID = -499567762752825122L;
 	
 	//调用的bean的name（如果配置，就使用该值）
 	private String beanName;
@@ -35,6 +32,8 @@ public class RPCRequestBean extends NettyRequest {
 	
 	//返回值的类型
 	private Class<?> returnType;
+	
+	private Class<?> className;
 
 	public Class<?> getClassName() {
 		return className;
@@ -89,4 +88,5 @@ public class RPCRequestBean extends NettyRequest {
 	public void setReturnType(Class<?> returnType) {
 		this.returnType = returnType;
 	}
+
 }

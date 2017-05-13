@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.hp.core.netty.bean.NettyRequest;
-import com.hp.core.netty.bean.NettyResponse;
 import com.hp.core.netty.server.NettyServer;
 import com.hp.core.netty.server.NettyServerChannelInboundHandler.NettyProcess;
 import com.hp.core.netty.server.Server;
@@ -50,9 +49,9 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 		server = new NettyServer(serverConfigBean.getPort(), new NettyProcess() {
 
 			@Override
-			public NettyResponse process(NettyRequest request) throws Exception {
+			public Object process(NettyRequest request) throws Exception {
 				log.info("process start. with request={}", request);
-				RPCRequestBean bean = (RPCRequestBean) request;
+				RPCRequestBean bean = (RPCRequestBean) request.getData();
 				Object serviceBean = null;
 				if (StringUtils.isNotEmpty(bean.getBeanName())) {
 					serviceBean = applicationContext.getBean(bean.getBeanName());
@@ -61,12 +60,12 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 				}
 				if (serviceBean == null) {
 					log.warn("process error. with getBean error. with request={}", request);
-					throw new BeanNoFoundException("can not found bean of beanName="+ bean.getBeanName() +" or className=" + bean.getClassName() + ". with messageId=" + bean.getMessageId());
+					throw new BeanNoFoundException("can not found bean of beanName="+ bean.getBeanName() +" or className=" + bean.getClassName() + ". with messageId=" + request.getMessageId());
 				}
 				
 				Object result = ObjectUtil.executeJavaMethod(serviceBean, bean.getMethodName(), bean.getParameterTypes(), bean.getParameters());
 				log.info("process success. with request={}", request);
-				return new NettyResponse(request.getMessageId(), result, bean.getReturnType());
+				return result;
 			}
 			
 			

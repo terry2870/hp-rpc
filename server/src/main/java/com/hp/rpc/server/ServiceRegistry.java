@@ -151,6 +151,7 @@ public class ServiceRegistry implements BeanPostProcessor, Closeable {
 			
 			//注册服务
 			serviceDiscoveryFactory.registerService(detail);
+			log.info("registry success with beanName={}, clazz={}, detail={}", beanName, clazz, detail);
 		}
 	}
 	
