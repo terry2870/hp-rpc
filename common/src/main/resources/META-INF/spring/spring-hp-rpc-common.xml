@@ -16,6 +16,5 @@
 	
 	<bean id="SpringContextUtil" class="com.hp.tools.common.utils.SpringContextUtil" />
 	
-	<import resource="classpath*:META-INF/spring/hp-core-zookeeper.xml"/>
 </beans>
 
