@@ -3,8 +3,8 @@
  */
 package com.hp.rpc.client.proxy;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class RPCRegistry implements BeanDefinitionRegistry {
 
 	static Logger log = LoggerFactory.getLogger(RPCRegistry.class);
 
-	private static Map<Class<?>, RPCProxyFactory<?>> knownRPCs = new HashMap<Class<?>, RPCProxyFactory<?>>();
+	private static Map<Class<?>, RPCProxyFactory<?>> knownRPCs = new ConcurrentHashMap<Class<?>, RPCProxyFactory<?>>();
 
 	@SuppressWarnings("unchecked")
 	public <T> T getRPCService(Class<T> type) throws BindingException {
