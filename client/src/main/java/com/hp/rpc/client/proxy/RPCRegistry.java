@@ -25,6 +25,7 @@ public class RPCRegistry implements BeanDefinitionRegistry {
 
 	private static Map<Class<?>, RPCProxyFactory<?>> knownRPCs = new ConcurrentHashMap<Class<?>, RPCProxyFactory<?>>();
 
+	
 	@SuppressWarnings("unchecked")
 	public <T> T getRPCService(Class<T> type) throws BindingException {
 		final RPCProxyFactory<T> rpcProxyFactory = (RPCProxyFactory<T>) knownRPCs.get(type);

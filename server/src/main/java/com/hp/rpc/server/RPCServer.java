@@ -14,9 +14,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.hp.core.netty.bean.NettyRequest;
-import com.hp.core.netty.server.NettyServer;
+import com.hp.core.netty.server.NettyServerImpl;
 import com.hp.core.netty.server.NettyServerChannelInboundHandler.NettyProcess;
-import com.hp.core.netty.server.Server;
+import com.hp.core.netty.server.NettyServer;
 import com.hp.rpc.common.exceptions.BeanNoFoundException;
 import com.hp.rpc.model.RPCRequestBean;
 import com.hp.rpc.model.RPCServerConfigBean;
@@ -34,7 +34,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 	private ApplicationContext applicationContext;
 	
 	private RPCServerConfigBean serverConfigBean;
-	private Server server;
+	private NettyServer server;
 	
 	/**
 	 * 初始化服务端
@@ -46,7 +46,7 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 			return;
 		}
 		//初始化服务
-		server = new NettyServer(serverConfigBean.getPort(), new NettyProcess() {
+		server = new NettyServerImpl(serverConfigBean.getPort(), new NettyProcess() {
 
 			@Override
 			public Object process(NettyRequest request) throws Exception {

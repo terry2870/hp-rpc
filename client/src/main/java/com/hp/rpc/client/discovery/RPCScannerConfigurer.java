@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -19,7 +18,7 @@ import com.netflix.config.DynamicPropertyFactory;
  * @author ping.huang
  * 2016年12月22日
  */
-public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor, InitializingBean {
+public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor {
 	
 	static Logger log = LoggerFactory.getLogger(RPCScannerConfigurer.class);
 	
@@ -60,11 +59,6 @@ public class RPCScannerConfigurer implements BeanDefinitionRegistryPostProcessor
 
 	public void setRpcRegistry(RPCRegistry rpcRegistry) {
 		this.rpcRegistry = rpcRegistry;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		log.info("basePackages= " + basePackages);
 	}
 
 
