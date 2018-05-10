@@ -3,7 +3,7 @@
  */
 package com.hp.rpc.model;
 
-import com.hp.tools.common.beans.BaseBean;
+import com.hp.core.common.beans.BaseBean;
 
 /**
  * @author ping.huang

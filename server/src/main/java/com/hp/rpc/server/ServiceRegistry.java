@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
+import com.hp.core.common.utils.StringUtil;
 import com.hp.core.zookeeper.bean.RegisterInstanceDetail;
 import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
 import com.hp.rpc.common.constants.RPCConstant;
 import com.hp.rpc.model.RPCServerConfigBean;
-import com.hp.tools.common.utils.StringUtil;
 
 /**
  * 服务注册

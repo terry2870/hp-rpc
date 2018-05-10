@@ -13,6 +13,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<archaius-core.version>0.7.5</archaius-core.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -22,7 +23,7 @@
 		<dependency>
 			<groupId>com.netflix.archaius</groupId>
 			<artifactId>archaius-core</artifactId>
-			<version>0.7.5</version>
+			<version>${archaius-core.version}</version>
 		</dependency>
 	</dependencies>
 </project>

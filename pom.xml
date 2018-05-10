@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
-		<groupId>com.hp.tools</groupId>
-		<artifactId>hp-tools</artifactId>
+		<groupId>com.hp.core</groupId>
+		<artifactId>hp-core</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -51,17 +51,14 @@
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-zookeeper</artifactId>
-			<version>${com.hp.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-netty</artifactId>
-			<version>${com.hp.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.core</groupId>
 			<artifactId>hp-core-zookeeper</artifactId>
-			<version>${com.hp.core.version}</version>
 		</dependency>
 	</dependencies>
 	

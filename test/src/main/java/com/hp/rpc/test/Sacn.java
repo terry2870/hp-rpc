@@ -4,27 +4,18 @@
 package com.hp.rpc.test;
 
 import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.filter.TypeFilter;
-import org.springframework.util.Assert;
 
-import com.hp.rpc.test.service.impl.TestServiceImpl;
-import com.hp.tools.common.utils.SpringContextUtil;
+import com.hp.core.common.utils.SpringContextUtil;
 
 /**
  * 扫描所有的需要调用远端接口的服务，并自动生成代理实现类

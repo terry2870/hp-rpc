@@ -5,7 +5,7 @@ package com.hp.rpc.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.hp.tools.common.beans.BaseBean;
+import com.hp.core.common.beans.BaseBean;
 
 /**
  * 远程调用服务端参数配置

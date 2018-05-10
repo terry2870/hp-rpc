@@ -5,7 +5,7 @@ package com.hp.rpc.model;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.hp.tools.common.beans.BaseBean;
+import com.hp.core.common.beans.BaseBean;
 
 /**
  * @author ping.huang

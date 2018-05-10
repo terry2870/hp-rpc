@@ -3,7 +3,7 @@
  */
 package com.hp.rpc.common.constants;
 
-import com.hp.tools.common.utils.StringUtil;
+import com.hp.core.common.utils.StringUtil;
 
 /**
  * @author ping.huang

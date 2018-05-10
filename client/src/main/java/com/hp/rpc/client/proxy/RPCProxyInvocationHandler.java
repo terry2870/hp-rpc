@@ -11,6 +11,8 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.core.common.beans.BaseBean;
+import com.hp.core.common.utils.SpringContextUtil;
 import com.hp.core.netty.bean.NettyRequest;
 import com.hp.core.netty.bean.NettyResponse;
 import com.hp.core.netty.client.Client;
@@ -19,8 +21,6 @@ import com.hp.core.zookeeper.discovery.ServiceDiscoveryFactory;
 import com.hp.rpc.client.factory.NettyClientFactory;
 import com.hp.rpc.common.exceptions.ServiceNoFoundException;
 import com.hp.rpc.model.RPCRequestBean;
-import com.hp.tools.common.beans.BaseBean;
-import com.hp.tools.common.utils.SpringContextUtil;
 
 /**
  * @author ping.huang
