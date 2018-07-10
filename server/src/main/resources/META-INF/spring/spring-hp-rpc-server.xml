@@ -14,7 +14,7 @@
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-	<bean id="RPCServer" class="com.hp.rpc.server.RPCServer" init-method="init" destroy-method="close">
+	<bean id="RPCServer" class="com.hp.rpc.server.RPCServer" init-method="init" destroy-method="close" depends-on="SpringContextUtil">
 		<property name="serverConfigBean" ref="RPCServerConfigBean" />
 	</bean>
 		

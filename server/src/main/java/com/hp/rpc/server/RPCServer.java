@@ -9,11 +9,9 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import com.hp.core.common.utils.ObjectUtil;
+import com.hp.core.common.utils.SpringContextUtil;
 import com.hp.core.netty.bean.NettyRequest;
 import com.hp.core.netty.server.NettyServer;
 import com.hp.core.netty.server.NettyServerChannelInboundHandler.NettyProcess;
@@ -26,12 +24,10 @@ import com.hp.rpc.model.RPCServerConfigBean;
  * @author ping.huang
  * 2016年11月4日
  */
-public class RPCServer implements Closeable, ApplicationContextAware {
+public class RPCServer implements Closeable {
 	
 	static Logger log = LoggerFactory.getLogger(RPCServer.class);
-	
-	private ApplicationContext applicationContext;
-	
+		
 	private RPCServerConfigBean serverConfigBean;
 	private NettyServer server;
 	
@@ -53,9 +49,9 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 				RPCRequestBean bean = (RPCRequestBean) request.getData();
 				Object serviceBean = null;
 				if (StringUtils.isNotEmpty(bean.getBeanName())) {
-					serviceBean = applicationContext.getBean(bean.getBeanName());
+					serviceBean = SpringContextUtil.getBean(bean.getBeanName());
 				} else {
-					serviceBean = applicationContext.getBean(bean.getClassName());
+					serviceBean = SpringContextUtil.getBean(bean.getClassName());
 				}
 				if (serviceBean == null) {
 					log.warn("process error. with getBean error. with request={}", request);
@@ -89,10 +85,5 @@ public class RPCServer implements Closeable, ApplicationContextAware {
 
 	public void setServerConfigBean(RPCServerConfigBean serverConfigBean) {
 		this.serverConfigBean = serverConfigBean;
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
-		this.applicationContext = arg0;
 	}
 }
