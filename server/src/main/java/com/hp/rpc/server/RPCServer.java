@@ -45,7 +45,7 @@ public class RPCServer implements Closeable {
 
 			@Override
 			public Object process(NettyRequest request) throws Exception {
-				log.info("process start. with request={}", request);
+				log.debug("process start. with request={}", request);
 				RPCRequestBean bean = (RPCRequestBean) request.getData();
 				Object serviceBean = null;
 				if (StringUtils.isNotEmpty(bean.getBeanName())) {
@@ -59,7 +59,7 @@ public class RPCServer implements Closeable {
 				}
 				
 				Object result = ObjectUtil.executeJavaMethod(serviceBean, bean.getMethodName(), bean.getParameterTypes(), bean.getParameters());
-				log.info("process success. with request={}", request);
+				log.debug("process success. with request={}", request);
 				return result;
 			}
 			
