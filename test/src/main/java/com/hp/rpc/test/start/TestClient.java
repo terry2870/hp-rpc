@@ -29,7 +29,7 @@ public class TestClient {
 	}
 	
 	//@Autowired
-	//ITest5 t5;
+	ITest5 t5;
 	
 	@Value("${zk.basePath}")
 	private String zkBasePath;
@@ -39,7 +39,7 @@ public class TestClient {
 		
 		try {
 			System.in.read();
-			//System.out.println("t5= " + t5.str5().toString());
+			System.out.println("t5= " + t5.str5().toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
